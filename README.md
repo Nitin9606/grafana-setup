@@ -27,22 +27,14 @@ wget https://raw.githubusercontent.com/grafana/loki/main/cmd/loki/loki-local-con
 wget https://raw.githubusercontent.com/grafana/loki/main/clients/cmd/promtail/promtail-local-config.yaml -O promtail-config.yaml
 
 5. Run Loki Container
-docker run -d --name=loki \\
-  -p 3100:3100 \\
-  -v $(pwd)/loki-config.yaml:/etc/loki/local-config.yaml \\
-  grafana/loki:2.9.3 \\
-  -config.file=/etc/loki/local-config.yaml
+docker run -d --name=loki -p 3100:3100 -v $(pwd)/loki-config.yaml:/etc/loki/local-config.yaml grafana/loki:2.9.3 -config.file=/etc/loki/local-config.yaml
 
 Check endpoints:
 - http://<EC2-IP>:3100/ready
 - http://<EC2-IP>:3100/metrics
 
 6. Run Promtail Container (Linked with Loki)
-docker run -d --name=promtail \\
-  -v /var/log:/var/log \\
-  -v $(pwd)/promtail-config.yaml:/etc/promtail/promtail-config.yaml \\
-  grafana/promtail:2.9.3 \\
-  -config.file=/etc/promtail/promtail-config.yaml
+docker run -d --name=promtail -v /var/log:/var/log -v $(pwd)/promtail-config.yaml:/etc/promtail/promtail-config.yaml grafana/promtail:2.9.3 -config.file=/etc/promtail/promtail-config.yaml
 
 7. Configure Grafana
 - Go to Grafana dashboard → Add data source
